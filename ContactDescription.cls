@@ -1,0 +1,22 @@
+public class ContactDescription implements Database.Batchable<sObject >
+{
+    public Database.QueryLocator start(Database.BatchableContext bc)
+    {
+        String conlist='SELECT id,Account.Name,Title,Description,Account.Description From Contact where AccountId !=null';
+        return Database.getQueryLocator(conlist);
+    }
+    public void execute(Database.BatchableContext bc, List<Contact> lis)
+    {
+        if(lis!=null)
+        {
+        for(Contact con:lis)
+        {
+        con.Description=con.Title + ' of '+ con.Account.Name + ': ' +con.Account.Description;
+        }
+        update lis;
+        }
+    }
+    public void finish(Database.BatchableContext bc)
+    {
+    }
+}
